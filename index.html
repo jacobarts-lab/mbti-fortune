@@ -39,6 +39,14 @@ button{font:inherit}
 .daily{font-size:12px;color:#8a8176;margin-top:14px}
 @media(max-width:480px){.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}}
 </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPHNDNE9WW"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-TPHNDNE9WW');
+</script>
 </head>
 <body>
 <main>
@@ -92,6 +100,11 @@ button{font:inherit}
 "use strict";
 document.addEventListener("DOMContentLoaded", function () {
   const $ = (id) => document.getElementById(id);
+  function track(name, params) {
+    if (typeof gtag === "function") {
+      gtag("event", name, params || {});
+    }
+  }
   const qs = [
     ['친구가 갑자기 “나 오늘 회사 때려쳤다”고 카톡을 보냈습니다.','일단 만나. 어디야?','뭔 일 있었는데? 왜 그만뒀어?','E','I'],
     ['여행 마지막 날. 비행기까지 6시간이 남았습니다.','못 가본 곳 하나라도 더 간다','근처 괜찮은 곳에서 천천히 시간을 보낸다','E','I'],
@@ -126,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function start() {
+    track("test_start", {test_name:"mbti_fortune"});
     $("intro").classList.add("hidden");
     $("quiz").classList.remove("hidden");
     render();
@@ -134,6 +148,10 @@ document.addEventListener("DOMContentLoaded", function () {
   function answer(choiceIndex) {
     const q = qs[idx];
     const key = q[choiceIndex === 0 ? 3 : 4];
+    track("question_answer", {
+      question_number: idx + 1,
+      answer_choice: choiceIndex === 0 ? "A" : "B"
+    });
     if (key.indexOf("LUCK_") === 0) luck.push(key);
     else score[key] += 1;
     idx += 1;
@@ -164,6 +182,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const h = hash(type + "|" + dateKey + "|" + luck.join("|"));
 
     const total = num(h,68,96);
+    track("test_complete", {test_name:"mbti_fortune", mbti_type:type});
+    track("mbti_result", {mbti_type:type});
     const love = num(h >>> 2,60,98);
     const money = num(h >>> 5,58,96);
     const work = num(h >>> 8,62,99);
@@ -221,6 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function share() {
+    track("share_click", {test_name:"mbti_fortune", mbti_type:$("type").textContent || "unknown"});
     try {
       if (navigator.share) {
         await navigator.share({title:"오늘의 MBTI 운세",text:resultText,url:location.href});
@@ -236,7 +257,10 @@ document.addEventListener("DOMContentLoaded", function () {
   $("startBtn").addEventListener("click", start);
   $("choiceA").addEventListener("click", function(){answer(0);});
   $("choiceB").addEventListener("click", function(){answer(1);});
-  $("restartBtn").addEventListener("click", function(){location.reload();});
+  $("restartBtn").addEventListener("click", function(){
+    track("restart_test", {test_name:"mbti_fortune"});
+    setTimeout(function(){ location.reload(); }, 120);
+  });
   $("shareBtn").addEventListener("click", share);
 });
 </script>
