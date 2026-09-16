@@ -64,7 +64,5 @@ window.resultText=`${type} · 오늘의 운세 ${total}점
 📍 행운의 장소: ${place}
 🧿 행운의 아이템: ${item}
 🔢 행운의 숫자: ${number}
-☕ 오늘의 커피: ${document.querySelector('#coffee').textContent}`}"
-
-async function shareResult(){try{if(navigator.share)await navigator.share({title:'오늘의 MBTI 운세',text:window.resultText});else{await navigator.clipboard.writeText(window.resultText);alert('결과를 복사했습니다.')}}catch(e){}}
+☕ 오늘의 커피: ${document.querySelector('#coffee').textContent}`}async function shareResult(){try{if(navigator.share)await navigator.share({title:'오늘의 MBTI 운세',text:window.resultText});else{await navigator.clipboard.writeText(window.resultText);alert('결과를 복사했습니다.')}}catch(e){}}
 </script></body></html>
