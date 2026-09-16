@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5efe5">
+<title>오늘의 MBTI 운세</title>
+<style>
+:root{--bg:#f5efe5;--card:#fffdf9;--ink:#222;--muted:#777;--line:#ddd4c7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+main{max-width:720px;margin:auto;padding:28px 18px 60px}
+.brand{font-size:12px;letter-spacing:.18em;color:#777;margin-bottom:28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 10px 35px rgba(0,0,0,.045)}
+h1{font-size:clamp(32px,8vw,46px);line-height:1.12;margin:0 0 14px}
+.sub,.note{color:var(--muted);line-height:1.65}
+button{font:inherit}
+.primary,.choice,.secondary{width:100%;border-radius:16px;padding:16px 18px;cursor:pointer}
+.primary{border:0;background:#222;color:white;font-weight:750;font-size:17px;margin-top:10px}
+.choice,.secondary{border:1px solid #d2c9bd;background:white;color:#222;text-align:left}
+.choice{font-size:16px;line-height:1.5}
+.choices{display:grid;gap:12px}
+.hidden{display:none!important}
+.progress{height:7px;background:#e8e0d5;border-radius:99px;overflow:hidden;margin-bottom:24px}
+.progress>div{height:100%;background:#222;width:0;transition:.2s}
+.qno{font-size:12px;color:#888;letter-spacing:.08em;margin-bottom:10px}
+.question{font-size:23px;font-weight:760;line-height:1.45;margin-bottom:22px}
+.type{font-size:50px;font-weight:850;letter-spacing:-.04em}
+.score{font-size:52px;font-weight:850;margin:8px 0 4px}
+.score small{font-size:16px;color:#888;font-weight:600}
+.message{line-height:1.7;margin:14px 0 24px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0}
+.metric,.luck{background:#f6f1e9;border-radius:16px;padding:14px}
+.metric span,.luck span{display:block;font-size:12px;color:#888;margin-bottom:6px}
+.metric b{font-size:21px}
+.lucks{display:grid;gap:9px;margin:16px 0}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.secondary{text-align:center;font-weight:700}
+.daily{font-size:12px;color:#8a8176;margin-top:14px}
+@media(max-width:480px){.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}}
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPHNDNE9WW"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-TPHNDNE9WW');
+</script>
+</head>
+<body>
+<main>
+<div class="brand">DAILY TYPE</div>
+
+<section id="intro" class="card">
+<h1>나는 어떤 타입이고,<br>오늘은 어떤 날일까?</h1>
+<p class="sub">16개의 조금 이상한 상황을 골라보세요. 뭘 재는지는 숨겨뒀습니다. 마지막에는 오늘의 운세까지 이어집니다.</p>
+<button id="startBtn" class="primary" type="button">검사 시작하기 →</button>
+<p class="note">약 2분 · 정답 없음 · 4문항은 운세에만 몰래 반영됩니다.</p>
+</section>
+
+<section id="quiz" class="card hidden">
+<div class="progress"><div id="bar"></div></div>
+<div id="qno" class="qno"></div>
+<div id="question" class="question"></div>
+<div class="choices">
+<button id="choiceA" class="choice" type="button"></button>
+<button id="choiceB" class="choice" type="button"></button>
+</div>
+</section>
+
+<section id="result" class="card hidden">
+<div class="qno">TODAY'S TYPE</div>
+<div id="type" class="type"></div>
+<div class="score"><span id="total"></span><small> / 100</small></div>
+<div id="message" class="message"></div>
+<div class="grid">
+<div class="metric"><span>❤️ 연애운</span><b id="love"></b></div>
+<div class="metric"><span>💰 금전운</span><b id="money"></b></div>
+<div class="metric"><span>💼 일·공부운</span><b id="work"></b></div>
+</div>
+<div class="lucks">
+<div class="luck"><span>☕ 오늘의 커피</span><b id="coffee"></b></div>
+<div class="luck"><span>🎯 오늘의 행동</span><b id="action"></b></div>
+<div class="luck"><span>🎨 행운의 색</span><b id="color"></b></div>
+<div class="luck"><span>📍 행운의 장소</span><b id="place"></b></div>
+<div class="luck"><span>🧿 행운의 아이템</span><b id="item"></b></div>
+<div class="luck"><span>🔢 행운의 숫자</span><b id="number"></b></div>
+</div>
+<div class="actions">
+<button id="restartBtn" class="secondary" type="button">다시 하기</button>
+<button id="shareBtn" class="primary" type="button">결과 공유</button>
+</div>
+<p class="daily">같은 답변이라면 같은 날에는 같은 운세가 나옵니다.</p>
+<p class="note">MBTI 공식 진단이 아닌 간이 성향 테스트이며, 운세는 엔터테인먼트용입니다.</p>
+</section>
+</main>
+
+<script>
+"use strict";
+document.addEventListener("DOMContentLoaded", function () {
+  const $ = (id) => document.getElementById(id);
+  function track(name, params) {
+    if (typeof gtag === "function") {
+      gtag("event", name, params || {});
+    }
+  }
+  const qs = [
+    ['친구가 갑자기 “나 오늘 회사 때려쳤다”고 카톡을 보냈습니다.','일단 만나. 어디야?','뭔 일 있었는데? 왜 그만뒀어?','E','I'],
+    ['여행 마지막 날. 비행기까지 6시간이 남았습니다.','못 가본 곳 하나라도 더 간다','근처 괜찮은 곳에서 천천히 시간을 보낸다','E','I'],
+    ['처음 간 모임에서 아는 사람이 딱 한 명뿐입니다.','그 한 명을 발판 삼아 다른 사람들과도 섞인다','일단 그 한 명 옆이 제일 편하다','E','I'],
+    ['10년 전의 나에게 문자 딱 한 줄을 보낼 수 있습니다.','미래에 실제로 도움 될 정보를 보낸다','그때의 나에게 꼭 해주고 싶었던 말을 보낸다','S','N'],
+    ['길을 걷다가 오래된 건물 하나를 발견했습니다.','언제 지었고 원래 뭐였는지 궁금하다','여기서 무슨 일이 있었을지 상상하게 된다','S','N'],
+    ['새로운 기계를 샀는데 설명서가 꽤 두껍습니다.','필요한 부분부터 찾아 읽고 쓴다','일단 만져보면서 기능을 발견한다','S','N'],
+    ['친구가 30만원짜리 신발을 사고 “어때?”라고 묻는데 솔직히 별로입니다.','가격 생각하면 나는 좀 애매한 것 같다고 말한다','본인이 마음에 들어 하면 좋은 점부터 말해준다','T','F'],
+    ['팀원이 실수해서 일이 30분 더 늘어났습니다.','왜 이런 일이 생겼는지부터 확인한다','당황했을 사람 상태부터 살핀다','T','F'],
+    ['친한 사람이 같은 고민을 세 번째 반복해서 털어놓습니다.','이번엔 진짜 바꿀 방법을 같이 정한다','그래도 일단 끝까지 들어준다','T','F'],
+    ['내일 갑자기 하루가 통째로 비었습니다.','오? 뭐 하지? 대충이라도 계획을 잡는다','개이득. 내일의 나에게 맡긴다','J','P'],
+    ['맛집에 갔는데 웨이팅이 70분입니다.','기다리기로 했으면 그냥 기다린다','근처 다른 괜찮은 집을 바로 찾는다','J','P'],
+    ['집을 나왔는데 원래 가려던 길이 공사 중입니다.','가장 빠른 우회로부터 찾는다','어차피 이렇게 된 거 다른 길로 가본다','J','P'],
+    ['붕어빵을 받았습니다. 어디부터 먹습니까?','머리부터','꼬리부터','LUCK_HEAD','LUCK_TAIL'],
+    ['카페에서 주문한 음료가 생각보다 너무 맛있습니다.','다음에도 똑같은 걸 시킨다','다음엔 다른 것도 잘할 것 같아서 바꿔본다','LUCK_REPEAT','LUCK_EXPLORE'],
+    ['엘리베이터에 혼자 탔는데 닫힘 버튼을 눌렀습니다. 멀리서 누군가 뛰어옵니다.','열림 버튼을 누른다','잠깐 고민하는 사이 문이 닫힌다','LUCK_OPEN','LUCK_TIMING'],
+    ['오늘 길에서 5천원을 주웠습니다. 주인을 찾기 어려운 상황이라면?','왠지 좋은 일에 써야 할 것 같다','일단 내 지갑에 넣고 생각한다','LUCK_GIVE','LUCK_KEEP']
+  ];
+
+  let idx = 0;
+  let score = {E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+  let luck = [];
+  let resultText = "";
+
+  function render() {
+    const q = qs[idx];
+    $("qno").textContent = "QUESTION " + (idx + 1) + " / " + qs.length;
+    $("question").textContent = q[0];
+    $("choiceA").textContent = q[1];
+    $("choiceB").textContent = q[2];
+    $("bar").style.width = ((idx / qs.length) * 100) + "%";
+  }
+
+  function start() {
+    track("test_start", {test_name:"mbti_fortune"});
+    $("intro").classList.add("hidden");
+    $("quiz").classList.remove("hidden");
+    render();
+  }
+
+  function answer(choiceIndex) {
+    const q = qs[idx];
+    const key = q[choiceIndex === 0 ? 3 : 4];
+    track("question_answer", {
+      question_number: idx + 1,
+      answer_choice: choiceIndex === 0 ? "A" : "B"
+    });
+    if (key.indexOf("LUCK_") === 0) luck.push(key);
+    else score[key] += 1;
+    idx += 1;
+    if (idx < qs.length) render();
+    else finish();
+  }
+
+  function hash(text) {
+    let h = 2166136261;
+    for (let i=0; i<text.length; i++) {
+      h ^= text.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  function pick(arr, seed) { return arr[seed % arr.length]; }
+  function num(seed,min,max) { return min + (seed % (max-min+1)); }
+
+  function finish() {
+    const type =
+      (score.E >= score.I ? "E" : "I") +
+      (score.S >= score.N ? "S" : "N") +
+      (score.T >= score.F ? "T" : "F") +
+      (score.J >= score.P ? "J" : "P");
+
+    const d = new Date();
+    const dateKey = [d.getFullYear(), d.getMonth()+1, d.getDate()].join("-");
+    const h = hash(type + "|" + dateKey + "|" + luck.join("|"));
+
+    const total = num(h,68,96);
+    track("test_complete", {test_name:"mbti_fortune", mbti_type:type});
+    track("mbti_result", {mbti_type:type});
+    const love = num(h >>> 2,60,98);
+    const money = num(h >>> 5,58,96);
+    const work = num(h >>> 8,62,99);
+
+    const nick = {
+      INTJ:'머릿속에서 이미 세 번 시뮬레이션 끝낸 사람', INTP:'생각하다가 생각의 옆길로 새는 사람',
+      ENTJ:'일단 판부터 짜고 보는 사람', ENTP:'계획은 없는데 이상하게 해결은 하는 사람',
+      INFJ:'사람 마음을 읽다가 본인 마음은 나중에 보는 사람', INFP:'혼자서 서사 한 편 완성하는 사람',
+      ENFJ:'분위기까지 책임지려는 사람', ENFP:'재밌어 보이면 일단 문부터 여는 사람',
+      ISTJ:'정해진 건 제대로 해야 마음이 편한 사람', ISFJ:'티 안 나게 챙길 건 다 챙기는 사람',
+      ESTJ:'결론부터 내고 움직이는 사람', ESFJ:'사람 사이 온도를 잘 맞추는 사람',
+      ISTP:'말보다 일단 해보고 판단하는 사람', ISFP:'내 취향은 조용하지만 확실한 사람',
+      ESTP:'상황 오면 그 자리에서 풀어버리는 사람', ESFP:'오늘 재밌는 게 꽤 중요한 사람'
+    };
+    const msgs = {
+      E:'사람과의 대화 속에서 생각보다 좋은 힌트를 얻을 수 있는 날입니다.',
+      I:'혼자 정리하는 시간이 오늘의 판단력을 더 선명하게 만들어줍니다.',
+      S:'익숙한 것 하나를 제대로 해내는 것이 새로운 기회를 만듭니다.',
+      N:'평소 지나쳤던 아이디어 하나를 붙잡아보세요. 의외로 쓸모가 있습니다.',
+      T:'감정보다 기준을 세우면 복잡했던 일이 생각보다 쉽게 정리됩니다.',
+      F:'작은 배려 하나가 예상보다 오래 좋은 분위기를 남기는 날입니다.',
+      J:'계획한 일을 하나씩 지우는 것만으로도 만족도가 꽤 높은 날입니다.',
+      P:'예상 밖의 선택 하나가 오늘을 재미있게 바꿀 수 있습니다.'
+    };
+
+    const coffee = pick(['Flat White','Aussie Cappuccino','Long Black','Vanilla Latte','Iced Latte','Espresso'],h);
+    const action = pick(['평소 안 고르던 메뉴 하나 골라보기','미뤄둔 연락 하나 보내기','10분만 아무 계획 없이 걷기','오늘 할 일 하나를 과감히 빼기','좋아하는 음악 한 곡 크게 듣기','작은 일 하나 오늘 바로 끝내기'],h>>>4);
+    const color = pick(['Navy','Forest Green','Burgundy','Cream','Charcoal','Cobalt Blue','Olive'],h>>>7);
+    const place = pick(['창가 자리','동네 서점','강변 산책로','조용한 골목','처음 가보는 카페','공원 벤치','집에서 가장 편한 자리','시장이나 번화가','높은 곳에서 전망이 보이는 곳','햇빛 드는 테라스'],h>>>10);
+    const item = pick(['볼펜','이어폰','작은 노트','손목시계','텀블러','동전 하나','선글라스','책 한 권','향수','열쇠고리','사진 한 장','좋아하는 컵'],h>>>13);
+    const number = pick([1,3,4,7,8,11,13,17,21,24,27,31,33,37,42,44,49,52,64,77,88,91],h>>>16);
+
+    $("quiz").classList.add("hidden");
+    $("result").classList.remove("hidden");
+    $("type").textContent = type;
+    $("total").textContent = total;
+    $("love").textContent = love;
+    $("money").textContent = money;
+    $("work").textContent = work;
+    $("message").textContent = nick[type] + ". " + msgs[type[0]] + " " + msgs[type[3]];
+    $("coffee").textContent = coffee;
+    $("action").textContent = action;
+    $("color").textContent = color;
+    $("place").textContent = place;
+    $("item").textContent = item;
+    $("number").textContent = number;
+
+    resultText = type + " · 오늘의 운세 " + total + "점\n" +
+      "❤️ 연애 " + love + " · 💰 금전 " + money + " · 💼 일 " + work + "\n" +
+      "📍 행운의 장소: " + place + "\n" +
+      "🧿 행운의 아이템: " + item + "\n" +
+      "🔢 행운의 숫자: " + number + "\n" +
+      "☕ 오늘의 커피: " + coffee;
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  async function share() {
+    track("share_click", {test_name:"mbti_fortune", mbti_type:$("type").textContent || "unknown"});
+    try {
+      if (navigator.share) {
+        await navigator.share({title:"오늘의 MBTI 운세",text:resultText,url:location.href});
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(resultText + "\n" + location.href);
+        alert("결과와 링크를 복사했습니다.");
+      } else {
+        prompt("아래 내용을 복사해 주세요.", resultText + "\n" + location.href);
+      }
+    } catch (e) {}
+  }
+
+  $("startBtn").addEventListener("click", start);
+  $("choiceA").addEventListener("click", function(){answer(0);});
+  $("choiceB").addEventListener("click", function(){answer(1);});
+  $("restartBtn").addEventListener("click", function(){
+    track("restart_test", {test_name:"mbti_fortune"});
+    setTimeout(function(){ location.reload(); }, 120);
+  });
+  $("shareBtn").addEventListener("click", share);
+});
+</script>
+</body>
+</html>
